@@ -1,0 +1,25 @@
+{
+    "name": "shootinggame",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon --exec node server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kimyoungyin/shooting-game.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/kimyoungyin/shooting-game/issues"
+    },
+    "homepage": "https://github.com/kimyoungyin/shooting-game#readme",
+    "dependencies": {
+        "express": "^4.18.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.19"
+    }
+}
