@@ -13,4 +13,9 @@ var config = {
   scene: [main]
 };
 
+var cursor;
+var nowX; //햄스터 생성 x좌표
+var hamster = []; //햄스터 사진 배열
+var cursorOn = false;
+
 var game = new Phaser.Game(config);
