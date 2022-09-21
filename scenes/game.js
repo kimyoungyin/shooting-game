@@ -9,7 +9,8 @@ var config = {
             debug: false,
         },
     },
-    scene: [FirstScene, SecondScene],
+    // scene: [FirstScene, SecondScene],
+    scene: [MoveToStopScene, FirstScene, SecondScene],
     audio: {
         disableWebAudio: true,
     },
@@ -17,4 +18,5 @@ var config = {
 
 var platforms, player, stars, scoreText, bombs, gameOver, cursors;
 var score = 0;
+var moveToStopPlayer1, moveToStopPlayer2;
 var game = new Phaser.Game(config);
