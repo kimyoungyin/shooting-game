@@ -13,9 +13,12 @@ var config = {
   scene: [main]
 };
 
+//초기화가 안됨
 var cursor;
 var nowX; //햄스터 생성 x좌표
-var hamster = []; //햄스터 사진 배열
-var cursorOn = false;
+var ham; //햄스터 객체
+var hamster; //햄스터 사진 배열
+var cursorOn;
+var cnt;
 
 var game = new Phaser.Game(config);
