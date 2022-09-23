@@ -1,6 +1,6 @@
 class SecondScene extends Phaser.Scene {
     constructor() {
-        super("secondeScene");
+        super({key:"SecondScene"});
     }
 
     preload() {
@@ -16,6 +16,7 @@ class SecondScene extends Phaser.Scene {
     }
 
     create() {
+        console.log("start");
         // 배경 이미지
         this.add.image(400, 300, "sky");
         // 점수 score
@@ -126,6 +127,16 @@ class SecondScene extends Phaser.Scene {
 
             gameOver = true;
         }
+
+        // 아래 코드는 먹히지 않는데 이유를 아직 모르겠음.
+        // this.input.keyboard.on('keyup', function(event){
+        //     if(event.key == '1') {
+        //         this.scene.start("FirstScene");
+        //     }                
+        // }, this);
+
+        // 숫자 1 키를 등록하는 함수 update 함수에서 사용할 예정
+        this.key_1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
     }
 
     update() {
@@ -146,6 +157,10 @@ class SecondScene extends Phaser.Scene {
         if (cursors.up.isDown && player.body.touching.down) {
             // 위 방향키 누르고 공중에 닿지 않았을 때만 점프
             player.setVelocityY(-330);
+        }
+        // create 함수에서 등록한 키를 사용하여 1로 씬을 넘기는 업데이트 기능.
+        if(this.key_1.isDown) {
+            this.scene.start('FirstScene');
         }
     }
 }

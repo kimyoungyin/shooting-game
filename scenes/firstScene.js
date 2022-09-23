@@ -1,6 +1,6 @@
 class FirstScene extends Phaser.Scene {
     constructor() {
-        super("myFirstScene");
+        super("FirstScene");
     }
 
     preload() {
@@ -126,6 +126,13 @@ class FirstScene extends Phaser.Scene {
 
             gameOver = true;
         }
+
+        // 씬 넘어가는 기능
+        this.input.keyboard.on('keyup', function(event){
+            if(event.key == '2') {
+                this.scene.start("SecondScene");
+            }            
+        }, this);
     }
 
     update() {
