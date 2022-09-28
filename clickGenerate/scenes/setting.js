@@ -10,7 +10,7 @@ var config = {
       gravity: {y : 0},
     }
   },
-  scene: [main]
+  scene: [overlap],
 };
 
 //초기화가 안됨
@@ -19,6 +19,6 @@ var nowX; //햄스터 생성 x좌표
 var ham; //햄스터 객체
 var hamster; //햄스터 사진 배열
 var cursorOn;
-var cnt;
+var player;
 
 var game = new Phaser.Game(config);

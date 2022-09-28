@@ -1,6 +1,6 @@
-class main extends Phaser.Scene {
+class images extends Phaser.Scene {
   constructor() {
-    super({ key: "main" });
+    super({ key: "images" });
   }
   
   preload() {
@@ -8,6 +8,7 @@ class main extends Phaser.Scene {
     this.load.image('button', 'img/button.png');
     this.load.image('tower', 'img/tower.png');
     this.load.image('platform', 'img/platform.png');
+    this.load.image('king', 'img/king.png');
   }
 
   create() {
@@ -16,27 +17,39 @@ class main extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.nowX = 100;
-    this.hamster = [];
+    this.hamsters = [];
     this.ham = {};
     this.cursorOn = false;
-    this.cnt = 0;
 
     const sp = this.add.image(100, 520, 'button').setInteractive();
-    sp.on('pointerdown', function () {
+    sp.on('pointerdown', () => {
       this.cursorOn = true;
 
       this.ham = this.add.sprite(this.nowX, 390, 'charactor');
 
-      this.hamster.push(this.ham);
-      this.cnt++; //생성 햄스터 개수
-
+      this.hamsters.push(this.ham);
       this.nowX = 100;//생성 좌표 100으로 초기화
-    }, this);
+    });
+
+  
+    console.log("여기까지 옴");
+    this.scene.anims.create({
+      key: 'attack',
+      frames: this.anims.generateFrameNumbers('king', {
+        prefix: 'attack-',
+        end: 2,
+      }),
+      frameRate: 8,
+    });
   }
 
   update() {
-    if (this.cursorOn === true && this.hamster[this.cnt - 1].x <= 500) {
-      this.add.sprite(this.hamster[this.cnt - 1].x++, 390, 'charactor');
+    if (this.cursorOn === true && this.hamsters[this.hamsters.length - 1].x <= 500) {
+      this.hamsters.forEach(element => {
+        if (element.x < 500) {
+          element.x++;
+        }
+      });
     }
   }
 }
