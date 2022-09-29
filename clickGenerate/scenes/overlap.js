@@ -22,6 +22,7 @@ class overlap extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.nowX = 550;
     this.hamsters = [];
+    this.hamsters2;
     this.ham = {};
     this.cursorOn = false;
     this.player;
@@ -29,6 +30,7 @@ class overlap extends Phaser.Scene {
     this.attackEnemy;
     this.attacking = false; //공격 여부
 
+    
     //버튼 누르면 햄스터 이동
     const sp = this.add.image(100, 520, 'button').setInteractive();
     sp.on('pointerdown', () => {
@@ -37,9 +39,9 @@ class overlap extends Phaser.Scene {
       this.ham = this.add.sprite(this.nowX, 390, 'charactor');
 
       this.hamsters.push(this.ham);
-      this.nowX = 550;//생성 좌표 100으로 초기화
-    });
-
+      this.nowX = 550;//생성 좌표 550으로 초기화
+    });    
+    
 
     this.knightAnimation = this.anims.create({
       key: 'attack',
@@ -62,9 +64,13 @@ class overlap extends Phaser.Scene {
     if (this.cursorOn === true && this.hamsters[this.hamsters.length - 1].x > 100) {
       this.hamsters.forEach(element => {
         if (element.x > 100 || this.attacking === false) {
-          element.x -= 3;
+          element.x--;
         }
       });
+    }
+    
+    if (this.cursorOn === true) {
+      this.player.x++;
     }
 
     this.hamsters.forEach(element => {
@@ -72,7 +78,7 @@ class overlap extends Phaser.Scene {
       //미라 사정거리 내에 햄스터가 들어오면 attacking true
       if (this.player.x + 90 > element.x) {
         this.attacking = true;
-        //console.log(this.attacking);
+        this.cursorOn = false;//만났으면 false
       }
     
       if (this.attacking === true) 
