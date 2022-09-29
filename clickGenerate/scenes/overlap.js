@@ -22,12 +22,9 @@ class overlap extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.nowX = 550;
     this.hamsters = [];
-    this.hamsters2;
     this.ham = {};
     this.cursorOn = false;
     this.player;
-    this.enemy;
-    this.attackEnemy;
     this.attacking = false; //공격 여부
 
     
@@ -37,11 +34,12 @@ class overlap extends Phaser.Scene {
       this.cursorOn = true;
 
       this.ham = this.add.sprite(this.nowX, 390, 'charactor');
+      this.ham.meet = false;
+      console.log(this.ham);
 
       this.hamsters.push(this.ham);
       this.nowX = 550;//생성 좌표 550으로 초기화
     });    
-    
 
     this.knightAnimation = this.anims.create({
       key: 'attack',
@@ -63,7 +61,17 @@ class overlap extends Phaser.Scene {
   update() {
     if (this.cursorOn === true && this.hamsters[this.hamsters.length - 1].x > 100) {
       this.hamsters.forEach(element => {
-        if (element.x > 100 || this.attacking === false) {
+        if (element.x > 100) {
+          element.x--;
+        }
+      });
+    }
+
+    if (this.cursorOn === false) {
+      //좀비와 만난 햄스터 제외 모두 이동
+      this.hamsters.forEach(element => {
+        console.log(element.meet);//처음꺼는 true, 나머지는 undefined
+        if (element.meet === false) {
           element.x--;
         }
       });
@@ -79,6 +87,7 @@ class overlap extends Phaser.Scene {
       if (this.player.x + 90 > element.x) {
         this.attacking = true;
         this.cursorOn = false;//만났으면 false
+        element.meet = true;//햄스터 객체 하나와 만났음을 나타냄
       }
     
       if (this.attacking === true) 
