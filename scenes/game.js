@@ -15,6 +15,7 @@ var config = {
     },
 };
 
-var platforms, player, stars, scoreText, bombs, gameOver, cursors;
+var platforms, player, stars, scoreText, bombs, gameOver, cursors, ufos, timedEvent, spawnTimes;
 var score = 0;
 var game = new Phaser.Game(config);
+

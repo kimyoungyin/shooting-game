@@ -9,6 +9,7 @@ class FirstScene extends Phaser.Scene {
         this.load.image("ground", "/assets/platform.png");
         this.load.image("star", "/assets/star.png");
         this.load.image("bomb", "/assets/bomb.png");
+        this.load.image("ufo", "assets/ufo.png"); // ufo
         this.load.spritesheet("dude", "/assets/dude.png", {
             frameWidth: 32,
             frameHeight: 48,
@@ -35,6 +36,9 @@ class FirstScene extends Phaser.Scene {
 
         // player
         player = this.physics.add.sprite(100, 450, "dude");
+
+        // ufo
+        ufos = this.add.image(100, 512, 'ufo');
 
         player.setBounce(0.2);
         player.setCollideWorldBounds(true);
@@ -78,18 +82,21 @@ class FirstScene extends Phaser.Scene {
             repeat: 11, // 11+1 = 12개 별
             setXY: { x: 12, y: 0, stepX: 70 }, // 각 시작 좌표
         });
-        // 장애물: bomb
+        // 장애물: bomb, ufo
         bombs = this.physics.add.group();
+        ufos = this.physics.add.group();
 
         stars.children.iterate(function (child) {
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
         });
 
-        // 별과 플랫폼은 충돌해야(add 후 작성해야 함)
+        // 별과 플랫폼은 충돌해야(add 후 작성해야 함), ufo도 충돌
         this.physics.add.collider(stars, platforms);
+        this.physics.add.collider(ufos, platforms);
 
         // 겹칠 때를 알려주기: 겹치는 대상1, 대상2, 이벤트핸들러, ?, ?
         this.physics.add.overlap(player, stars, collectStar, null, this);
+        this.physics.add.overlap(player, ufos, collectStar, null, this);
 
         // 별 먹기: star와 player가 겹치는 이벤트 발생 시
         function collectStar(player, star) {
@@ -98,21 +105,24 @@ class FirstScene extends Phaser.Scene {
 
             score += 10;
             scoreText.setText("Score: " + score); // add.text로 생성한 text 수정: setText
-            if (stars.countActive(true) === 0) {
-                stars.children.iterate(function (child) {
-                    child.enableBody(true, child.x, 0, true, true);
-                });
-
-                var x =
-                    player.x < 400
-                        ? Phaser.Math.Between(400, 800)
-                        : Phaser.Math.Between(0, 400);
-
-                var bomb = bombs.create(x, 16, "bomb");
-                bomb.setBounce(1);
-                bomb.setCollideWorldBounds(true);
-                bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-            }
+            
+            if (star !== ufos) {
+                if (stars.countActive(true) === 0) {
+                    stars.children.iterate(function (child) {
+                        child.enableBody(true, child.x, 0, true, true);
+                    });
+    
+                    var x =
+                        player.x < 400
+                            ? Phaser.Math.Between(400, 800)
+                            : Phaser.Math.Between(0, 400);
+    
+                    var bomb = bombs.create(x, 16, "bomb");
+                    bomb.setBounce(1);
+                    bomb.setCollideWorldBounds(true);
+                    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+                }
+            } 
         }
         this.physics.add.collider(bombs, platforms);
 
@@ -133,6 +143,50 @@ class FirstScene extends Phaser.Scene {
                 this.scene.start("SecondScene");
             }            
         }, this);
+
+        const spawnTimes = {
+            count : 0,
+            max() {
+                return this.values.length;
+            },
+            values : [5000, 1000, 3000, 2000, 4000],
+        };
+
+
+        // timer 기능
+        var timer = this.time.addEvent({
+            delay: 10000,
+            callback: onEvent,
+            args: [ufos],
+            callbackScope: this,
+            // loop: true
+        });
+
+        function onEvent() {
+            // console.log("again");
+            console.log(timer);
+            var x = (player.x < 400) ? Phaser.Math.Between(400,800) : Phaser.Math.Between(0,400);
+            var ufo = ufos.create(x, 16, 'ufo');
+            ufo.setBounceY(Phaser.Math.FloatBetween(0.3, 0.4));
+            // timer.remove();
+            console.log("keep going!");
+            if (spawnTimes.count === spawnTimes.max()) {
+                spawnTimes.count = 0;
+                console.log("again!");
+            }
+            timer = this.time.addEvent({
+                delay: spawnTimes.values[spawnTimes.count],
+                callback: onEvent,
+                args: [ufos],
+                callbackScope: this,
+                // loop: true
+            });
+            ++spawnTimes.count;
+
+            // ufo.setBounce(1);
+            // ufo.setCollideWorldBounds(true);
+            // ufo.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        }
     }
 
     update() {
